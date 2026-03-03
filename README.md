@@ -4,7 +4,7 @@ A personal fork of [Mappy-Continued](https://github.com/Shushuda/Mappy-Continued
 
 Compatible with Midnight!
 
-All credit for the addon's design and features goes to the original authors. This fork only adds targeted fixes for combat-related loading issues so the addon initializes and operates correctly during combat lockdown. If Shushuda's upstream repo incorporates these fixes, this fork will no longer be needed.
+All credit for the addon's design and features goes to the original authors. This fork adds targeted bugfixes and performance improvements. If Shushuda's upstream repo incorporates these changes, this fork will no longer be needed.
 
 ## Features
 
@@ -28,36 +28,34 @@ Other features include:
 
 ## Changes in this fork
 
-* **Combat-safe initialization** — Minimap setup is split into combat-safe and deferred phases so the addon loads correctly during combat
-* **Combat guards** — All interactive functions (ghost/unghost, hide/show elements, dragging) gracefully handle combat lockdown
-* **Reduced taint** — Button event hooks use HookScript with flag-based control instead of replacing script handlers
+**Combat safety:**
+* Initialization split into combat-safe and deferred phases
+* All interactive functions guard against combat lockdown
+* Button hooks use HookScript to avoid tainting Blizzard script chains
+
+**Performance:**
+* Fixed implicit global variable writes in coordinate updates
+* Localized hot-path API calls at file scope
+* Coordinate text only updates when position changes
+* Minimap resize/re-render skipped when size is unchanged
+* Movement alpha changes debounced to coalesce rapid events
+* Cached player class for per-tick Druid travel form check
+* `ADDON_LOADED` unregistered after init
 
 ## Slash commands
 
 `/mappy` - Opens options in the Interface window
-
 `/mappy help` - Shows a list of available commands
-
 `/mappy default` - Loads the default profile
-
 `/mappy save settingsname` - Saves the settings under the name settingsname
-
 `/mappy load settingsname` - Loads the settings
-
 `/mappy settingsname` - Shorthand version of /mappy load
-
 `/mappy ghost` - Mouse clicks in the minimap will be passed through to the background
-
 `/mappy unghost` - Mouse clicks work as usual
-
 `/mappy corner TOPLEFT|TOPRIGHT|BOTTOMLEFT|BOTTOMRIGHT` - Sets the starting corner for button stacking
-
 `/mappy reset` - Resets all settings and profiles
-
 `/mappy unlock` - Unlocks the minimap for dragging
-
 `/mappy lock` - Locks the minimap, preventing its movement
-
 `/mappy reload` - Reload Mappy if something doesn't look right (buttons overlapping etc)
 
 ## Authors
@@ -65,7 +63,7 @@ Other features include:
 * [Mundocani](https://github.com/Mundocani) — original author of Mappy
 * [LynchburgJack](https://github.com/LynchburgJack) — maintainer of [Mappy-Shadowlands](https://github.com/LynchburgJack/Mappy-Shadowlands) fork
 * [Shushuda](https://github.com/Shushuda) — maintainer of [Mappy-Continued](https://github.com/Shushuda/Mappy-Continued), which this fork is based on
-* [wealdly](https://github.com/wealdly) — combat-loading bugfixes only
+* [wealdly](https://github.com/wealdly) — bugfixes and performance improvements
 
 ## License
 
