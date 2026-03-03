@@ -1216,6 +1216,9 @@ function Mappy:ConfigureMinimap()
 	    end
     end
 
+    -- Apply icon smoothing to Minimap children
+    self:ApplyMinimapSmoothing()
+
 	if TimeManagerClockButton then
 		TimeManagerClockButton:ClearAllPoints()
 		TimeManagerClockButton:SetPoint("CENTER", Minimap, "BOTTOM", 0, -1)
@@ -1304,6 +1307,30 @@ function Mappy:ConfigureMinimap()
 	end
 
 	self:AdjustAlpha()
+end
+
+-- Apply sub-pixel rendering to all texture regions on a frame
+function Mappy:SmoothRegions(pFrame)
+	for _, region in pairs({pFrame:GetRegions()}) do
+		if region.SetSnapToPixelGrid and not region.Mappy_Smoothed then
+			region:SetSnapToPixelGrid(false)
+			region:SetTexelSnappingBias(0)
+			region.Mappy_Smoothed = true
+		end
+	end
+end
+
+-- Apply icon smoothing to Minimap children to reduce aliasing on POI pins
+function Mappy:ApplyMinimapSmoothing()
+	-- Apply smoothing to Minimap's own regions
+	self:SmoothRegions(Minimap)
+
+	-- Process all Minimap children (POI pins, vignettes, quest overlays, etc.)
+	for _, child in pairs({Minimap:GetChildren()}) do
+		if not child:IsForbidden() then
+			self:SmoothRegions(child)
+		end
+	end
 end
 
 function Mappy:GetUIObjectDescription(pUIObject)
@@ -1518,6 +1545,13 @@ function Mappy:Update()
 	-- Update the coords (skip the call entirely when hidden)
 	if not self.CurrentProfile.HideCoordinates then
 		self:UpdateCoords()
+	end
+
+	-- Periodic icon smoothing for dynamically created minimap pins (every 2s)
+	self.SmoothingTimer = (self.SmoothingTimer or 0) + 0.2
+	if self.SmoothingTimer >= 2 then
+		self.SmoothingTimer = 0
+		self:ApplyMinimapSmoothing()
 	end
 end
 
@@ -2599,7 +2633,7 @@ function Mappy._OptionsPanel:Construct(pParent)
         Mappy:SetMinimapSize(vSize)
         MappySizeSliderText:SetText("Size - " .. vSize)
     end)
-	
+
 	-- Alpha slider
 	
 	self.AlphaSlider = CreateFrame("Slider", "MappyAlphaSlider", self, "OptionsSliderTemplate")
