@@ -1,14 +1,10 @@
 # Mappy-Continued
 
-A continuation of [Mappy](https://github.com/Mundocani/Mappy) addon for World of Warcraft, originally created by [Mundocani](https://github.com/Mundocani).
+A fork of [Mappy-Continued](https://github.com/Shushuda/Mappy-Continued) / [Mappy](https://github.com/Mundocani/Mappy) addon for World of Warcraft.
 
 Compatible with Midnight!
 
-Since the original addon seems pretty much abandoned, I've decided to fork and maintain it. I love this addon too much to find a new one, so I've fixed it instead!
-
-Please bear in mind that I'm not planning on adding new features nor refactoring the code. I want to maintain the currently implemented features with as little modifications of the original codebase as possible. There will be some dirty hacks, which I might pretty-up later.
-
-I _might_ add some new things if you ask for any, but it's going to be a case-by-case thing.
+This fork focuses on fixing combat-related loading issues — the addon now properly initializes and operates when the player is in combat lockdown.
 
 ## Features
 
@@ -29,6 +25,12 @@ Other features include:
 * Bigger and/or blinking gathering nodes
 * Classic-style dot for gathering nodes
 * Player coordinates
+
+## Changes in this fork
+
+* **Combat-safe initialization** — Minimap setup is split into combat-safe and deferred phases so the addon loads correctly during combat
+* **Combat guards** — All interactive functions (ghost/unghost, hide/show elements, dragging) gracefully handle combat lockdown
+* **Reduced taint** — Button event hooks use HookScript with flag-based control instead of replacing script handlers
 
 ## Slash commands
 
@@ -62,7 +64,8 @@ Other features include:
 
 * [Mundocani](https://github.com/Mundocani) (original author)
 * [LynchburgJack](https://github.com/LynchburgJack) (maintainer of [Mappy-Shadowlands](https://github.com/LynchburgJack/Mappy-Shadowlands) fork)
-* [Shushuda](https://github.com/Shushuda) (maintainer of this fork - [Mappy-Continued](https://github.com/Shushuda/Mappy-Continued))
+* [Shushuda](https://github.com/Shushuda) (maintainer of [Mappy-Continued](https://github.com/Shushuda/Mappy-Continued))
+* [wealdly](https://github.com/wealdly) (maintainer of this fork — combat-loading fixes)
 
 ## License
 
