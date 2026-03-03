@@ -32,6 +32,7 @@ Other features include:
 * Initialization split into combat-safe and deferred phases
 * All interactive functions guard against combat lockdown
 * Button hooks use HookScript to avoid tainting Blizzard script chains
+* Protected frame GetPoint calls wrapped in pcall for restricted region safety
 
 **Performance:**
 * Fixed implicit global variable writes in coordinate updates
@@ -41,6 +42,9 @@ Other features include:
 * Movement alpha changes debounced to coalesce rapid events
 * Cached player class for per-tick Druid travel form check
 * `ADDON_LOADED` unregistered after init
+
+**Visual:**
+* Icon smoothing on minimap POI pins and overlays (reduces aliasing on quest markers, vignettes, and tracking icons)
 
 ## Slash commands
 
