@@ -7,6 +7,7 @@ Mappy-Continued.code-workspace
 
 # Claude Code
 .claude/
+CLAUDE.md
 
 # WoW UI source (documentation reference only)
 wow-ui-source/
