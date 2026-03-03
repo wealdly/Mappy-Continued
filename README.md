@@ -1,10 +1,10 @@
 # Mappy-Continued
 
-A fork of [Mappy-Continued](https://github.com/Shushuda/Mappy-Continued) / [Mappy](https://github.com/Mundocani/Mappy) addon for World of Warcraft.
+A personal fork of [Mappy-Continued](https://github.com/Shushuda/Mappy-Continued) by [Shushuda](https://github.com/Shushuda), which is itself a continuation of the original [Mappy](https://github.com/Mundocani/Mappy) addon by [Mundocani](https://github.com/Mundocani).
 
 Compatible with Midnight!
 
-This fork focuses on fixing combat-related loading issues — the addon now properly initializes and operates when the player is in combat lockdown.
+All credit for the addon's design and features goes to the original authors. This fork only adds targeted fixes for combat-related loading issues so the addon initializes and operates correctly during combat lockdown. If Shushuda's upstream repo incorporates these fixes, this fork will no longer be needed.
 
 ## Features
 
@@ -62,10 +62,10 @@ Other features include:
 
 ## Authors
 
-* [Mundocani](https://github.com/Mundocani) (original author)
-* [LynchburgJack](https://github.com/LynchburgJack) (maintainer of [Mappy-Shadowlands](https://github.com/LynchburgJack/Mappy-Shadowlands) fork)
-* [Shushuda](https://github.com/Shushuda) (maintainer of [Mappy-Continued](https://github.com/Shushuda/Mappy-Continued))
-* [wealdly](https://github.com/wealdly) (maintainer of this fork — combat-loading fixes)
+* [Mundocani](https://github.com/Mundocani) — original author of Mappy
+* [LynchburgJack](https://github.com/LynchburgJack) — maintainer of [Mappy-Shadowlands](https://github.com/LynchburgJack/Mappy-Shadowlands) fork
+* [Shushuda](https://github.com/Shushuda) — maintainer of [Mappy-Continued](https://github.com/Shushuda/Mappy-Continued), which this fork is based on
+* [wealdly](https://github.com/wealdly) — combat-loading bugfixes only
 
 ## License
 
