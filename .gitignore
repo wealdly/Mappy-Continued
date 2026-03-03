@@ -3,7 +3,7 @@
 # IDE
 .idea
 .vscode
-Mappy-Continued.code-workspace
+*.code-workspace
 
 # Claude Code
 .claude/
