@@ -382,6 +382,7 @@ function Mappy:InitializeMinimap()
 	-- Register for events
 	self.EventLib:RegisterEvent("ZONE_CHANGED", self.ZoneChanged, self)
 	self.EventLib:RegisterEvent("ZONE_CHANGED_INDOORS", self.ZoneChanged, self)
+	self.EventLib:RegisterEvent("ZONE_CHANGED_NEW_AREA", self.ZoneChanged, self)
 
 	self.EventLib:RegisterEvent("PLAYER_ENTERING_WORLD", self.RegenEnabled, self)
 	self.EventLib:RegisterEvent("PLAYER_REGEN_ENABLED", self.RegenEnabled, self)
@@ -711,6 +712,9 @@ function Mappy:InitializeSquareShape()
 		vStaticOverlay.SetAtlas = function() end
 		MinimapBackdrop.StaticOverlayTexture = vStaticOverlay
 	end
+
+	-- Sync overlay visibility with housing state (handles login-inside-house case)
+	self:UpdateHousingOverlay()
 
 	MinimapBackdrop.backdropInfo = {
 		bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
@@ -1634,10 +1638,21 @@ end
 
 function Mappy:ZoneChanged()
 	self:AdjustAlpha()
+	self:UpdateHousingOverlay()
+end
+
+function Mappy:UpdateHousingOverlay()
+	if MinimapBackdrop and MinimapBackdrop.StaticOverlayTexture then
+		local isInside = C_Housing and C_Housing.IsInsideHouse and C_Housing.IsInsideHouse()
+		MinimapBackdrop.StaticOverlayTexture:SetShown(isInside or false)
+	end
 end
 
 function Mappy:RegenEnabled()
 	self.InCombat = false
+
+	-- Update housing overlay on PLAYER_ENTERING_WORLD (fires on login/reload/zone transition)
+	self:UpdateHousingOverlay()
 
 	-- Do a reconfiguration after a short delay
 	self.SchedulerLib:ScheduleUniqueTask(0.25, self.ConfigureMinimap, self)
