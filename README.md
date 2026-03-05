@@ -34,13 +34,11 @@ Other features include:
 * Button hooks use HookScript to avoid tainting Blizzard script chains
 * Protected frame GetPoint calls wrapped in pcall for restricted region safety
 
-**Performance:**
+**Bugfixes:**
 * Fixed implicit global variable writes in coordinate updates
-* Localized hot-path API calls at file scope
-* Coordinate text only updates when position changes
-* Minimap resize/re-render skipped when size is unchanged
-* Movement alpha changes debounced to coalesce rapid events
-* Cached player class for per-tick Druid travel form check
+* Fixed housing indoor overlay stuck after logging in inside a house
+
+**Performance:**
 * `ADDON_LOADED` unregistered after init
 
 **Visual:**
