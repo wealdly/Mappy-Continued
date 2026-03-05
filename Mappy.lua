@@ -5,23 +5,6 @@ _, Mappy = ...
 
 local gAddonName = select(1, ...)
 
--- Localize frequently-used globals for hot-path performance
-local pairs, ipairs, type, select, unpack = pairs, ipairs, type, select, unpack
-local string_format = string.format
-local math_floor = math.floor
-local math_abs = math.abs
-local InCombatLockdown = InCombatLockdown
-local IsIndoors = IsIndoors
-local IsResting = IsResting
-local IsMounted = IsMounted
-local IsFlying = IsFlying
-local UnitInVehicle = UnitInVehicle
-local GetInstanceInfo = GetInstanceInfo
-local GetShapeshiftForm = GetShapeshiftForm
-local UnitClass = UnitClass
-local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
-local C_Map_GetPlayerMapPosition = C_Map.GetPlayerMapPosition
-
 gMappy_Settings = nil
 
 -- MBB compatibility
@@ -1193,18 +1176,12 @@ function Mappy:ConfigureMinimap()
     end
 
     if not (Mappy.FarmHudEnabled and FarmHud:IsVisible()) then
-	    local newSize = self.CurrentProfile.MinimapSize
-	    if Minimap:GetWidth() ~= newSize then
-	        Minimap:SetWidth(newSize)
-	        Minimap:SetHeight(newSize)
-	    end
+	    Minimap:SetWidth(self.CurrentProfile.MinimapSize)
+	    Minimap:SetHeight(self.CurrentProfile.MinimapSize)
     end
 
-	local newClusterSize = self.CurrentProfile.MinimapSize
-	if MinimapCluster:GetWidth() ~= newClusterSize then
-	    MinimapCluster:SetWidth(newClusterSize)
-	    MinimapCluster:SetHeight(newClusterSize)
-	end
+	MinimapCluster:SetWidth(self.CurrentProfile.MinimapSize)
+	MinimapCluster:SetHeight(self.CurrentProfile.MinimapSize)
 
 	for vMapArrow, _ in pairs(self.LandmarkArrows) do
 		vMapArrow.Mappy.SetWidth(vMapArrow, self.CurrentProfile.MinimapSize * 1.1)
@@ -1212,12 +1189,8 @@ function Mappy:ConfigureMinimap()
 	end
 
     if not (Mappy.FarmHudEnabled and FarmHud:IsVisible()) then
-	    -- Only poke scale when size actually changed (triggers expensive minimap re-render)
-	    if self.LastAppliedMinimapSize ~= self.CurrentProfile.MinimapSize then
-	        self.LastAppliedMinimapSize = self.CurrentProfile.MinimapSize
-	        Minimap:SetScale(1.001) -- Poke the scaling to force a refresh of the minimap size
-	        Minimap:SetScale(1)
-	    end
+	    Minimap:SetScale(1.001) -- Poke the scaling to force a refresh of the minimap size
+	    Minimap:SetScale(1)
     end
 
     -- Apply icon smoothing to Minimap children
@@ -1455,12 +1428,9 @@ function Mappy:FindAddonButtons(pFrame, pAnchoredTo)
 end
 
 function Mappy:IsDruidTravelForm()
-	-- Cache player class (never changes during a session)
-	if not self.PlayerClassID then
-		_, self.PlayerClassID = UnitClass("player")
-	end
+	local _, vClassID = UnitClass("player")
 
-	if self.PlayerClassID ~= "DRUID" then
+	if vClassID ~= "DRUID" then
 		return false
 	end
 
@@ -1560,32 +1530,17 @@ function Mappy:Update()
 end
 
 function Mappy:UpdateCoords()
-    local map = C_Map_GetBestMapForUnit("player")
+    local map = C_Map.GetBestMapForUnit("player")
     if map then
-        local position = C_Map_GetPlayerMapPosition(map, "player")
+        local position = C_Map.GetPlayerMapPosition(map, "player")
         if position then
             local vX, vY = position:GetXY()
-            -- Only update text when coordinates actually change (avoids string alloc + SetText)
-            local rX = math_floor(vX * 1000 + 0.5)
-            local rY = math_floor(vY * 1000 + 0.5)
-            if rX ~= self.LastCoordX or rY ~= self.LastCoordY then
-                self.LastCoordX = rX
-                self.LastCoordY = rY
-                self.CoordString:SetText(string_format("%.1f, %.1f", vX * 100, vY * 100))
-            end
+            self.CoordString:SetText(string.format("%.1f, %.1f", vX * 100, vY * 100))
         else
-            if self.LastCoordX then
-                self.LastCoordX = nil
-                self.LastCoordY = nil
-                self.CoordString:SetText("")
-            end
-        end
-    else
-        if self.LastCoordX then
-            self.LastCoordX = nil
-            self.LastCoordY = nil
             self.CoordString:SetText("")
         end
+    else
+        self.CoordString:SetText("")
     end
 end
 
@@ -1667,14 +1622,12 @@ end
 
 function Mappy:StartedMoving()
 	self.IsMoving = true
-	-- Debounce rapid start/stop movement to coalesce alpha adjustments
-	self.SchedulerLib:ScheduleUniqueTask(0.05, self.AdjustAlpha, self)
+	self:AdjustAlpha()
 end
 
 function Mappy:StoppedMoving()
 	self.IsMoving = false
-	-- Debounce rapid start/stop movement to coalesce alpha adjustments
-	self.SchedulerLib:ScheduleUniqueTask(0.05, self.AdjustAlpha, self)
+	self:AdjustAlpha()
 end
 
 function Mappy:TalentChanged()
