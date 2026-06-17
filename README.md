@@ -26,8 +26,8 @@ Other features include:
 * Gathering overlay support for Gatherer and GatherMate
 * Compatibility with MinimapButtonBag Reborn
 * Compatibility with FarmHud
-* Bigger and/or blinking gathering nodes
-* Classic-style dot for gathering nodes
+* ~~Bigger and/or blinking gathering nodes~~ - **No longer possible since 12.0.7**
+* ~~Classic-style dot for gathering nodes~~ - **No longer possible since 12.0.7**
 * Player coordinates
 
 ## Slash commands
