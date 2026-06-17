@@ -13,7 +13,8 @@ Mappy.MBBenabled = nil
 -- FarmHud compatibility
 Mappy.FarmHudEnabled = nil
 
-Mappy.enableBlips = true
+-- 12.0.7: Blizzard removed Minimap:SetBlipTexture() from API
+Mappy.enableBlips = false
 
 Mappy.StackingInfo = {}
 
@@ -2614,8 +2615,15 @@ function Mappy._OptionsPanel:Construct(pParent)
 	self.HideBorderCheckbutton:SetScript("OnClick", function (self) Mappy:SetHideBorder(self:GetChecked()) end)
 	MappyHideBorderCheckbuttonText:SetText("Hide border")
 	
+    -- Gather section header
+    -- 12.0.7: Blizzard removed Minimap:SetBlipTexture() from API
+
+    self.GatherHeader = self:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+    self.GatherHeader:SetPoint("TOPRIGHT", self.SettingsLine, "TOPRIGHT", -5, 13)
+    self.GatherHeader:SetText("Addons cannot modify gathering nodes since 12.0.7. Thanks Blizz!")
+
 	-- Flash gathering nodes
-	
+
 	self.FlashGatherNodesCheckbutton = CreateFrame("CheckButton", "MappyFlashGatherNodesCheckbutton", self, "InterfaceOptionsCheckButtonTemplate")
 	self.FlashGatherNodesCheckbutton:SetPoint("TOPLEFT", self.HideZoneNameCheckbutton, "TOPLEFT", 340, 0)
 	self.FlashGatherNodesCheckbutton:SetScript("OnClick", function (self) Mappy:SetFlashGatherNodes(self:GetChecked()) end)
@@ -2731,6 +2739,10 @@ function Mappy._OptionsPanel:OnShow()
 	self.FlashGatherNodesCheckbutton:SetChecked(Mappy.CurrentProfile.FlashGatherNodes)
 	self.SmallGatherNodesCheckbutton:SetChecked(not Mappy.CurrentProfile.NormalGatherNodes)
     self.OldGatherNodesCheckbutton:SetChecked(Mappy.CurrentProfile.OldGatherNodes)
+	-- 12.0.7: Blizzard removed Minimap:SetBlipTexture() from API
+	self.FlashGatherNodesCheckbutton:SetEnabled(Mappy.enableBlips)
+	self.SmallGatherNodesCheckbutton:SetEnabled(Mappy.enableBlips)
+	self.OldGatherNodesCheckbutton:SetEnabled(Mappy.enableBlips)
     self.AddonPositionCheckbutton:SetChecked(Mappy.CurrentProfile.UseAddonPosition)
     self.LockPositionCheckbutton:SetChecked(Mappy.CurrentProfile.LockPosition)
 	self.GhostCheckbutton:SetChecked(Mappy.CurrentProfile.GhostMinimap)
