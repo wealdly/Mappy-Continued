@@ -1383,6 +1383,11 @@ function Mappy:IsButtonFrame(pFrame, pAnchoredTo)
 	local	vFrameWidth = pFrame:GetWidth()
 	local	vFrameHeight = pFrame:GetHeight()
 
+	-- a frame with a secret size can't be measured, so it can't be a minimap button
+	if issecretvalue and (issecretvalue(vFrameWidth) or issecretvalue(vFrameHeight)) then
+		return false
+	end
+
 	if self.IgnoreFrames[vFrameName]
 	or self.MinimapButtonsByFrame[pFrame]
 	or vFrameType == "Model"
